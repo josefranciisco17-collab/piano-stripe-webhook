@@ -8,7 +8,7 @@ const admin = require("firebase-admin");
 const {
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET,
-  FIREBASE_SERVICE_ACCOUNT_JSON,
+  GOOGLE_APPLICATION_CREDENTIALS,
   FRONTEND_URL = "https://josefranciisco17-collab.github.io/JuniorGame",
   PORT = 3000
 } = process.env;
@@ -21,23 +21,13 @@ if (!STRIPE_WEBHOOK_SECRET) {
   throw new Error("Falta STRIPE_WEBHOOK_SECRET.");
 }
 
-if (!FIREBASE_SERVICE_ACCOUNT_JSON) {
-  throw new Error("Falta FIREBASE_SERVICE_ACCOUNT_JSON.");
-}
-
-let serviceAccount;
-
-try {
-  serviceAccount = JSON.parse(FIREBASE_SERVICE_ACCOUNT_JSON);
-} catch (error) {
-  throw new Error(
-    "FIREBASE_SERVICE_ACCOUNT_JSON no contiene un JSON válido."
-  );
+if (!GOOGLE_APPLICATION_CREDENTIALS) {
+  throw new Error("Falta GOOGLE_APPLICATION_CREDENTIALS.");
 }
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.applicationDefault()
   });
 }
 
